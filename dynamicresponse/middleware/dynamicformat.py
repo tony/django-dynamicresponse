@@ -1,5 +1,9 @@
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
+
 from django.http import HttpResponse, QueryDict
-from django.utils import simplejson
 
 from dynamicresponse.response import DynamicResponse
 
@@ -70,7 +74,7 @@ class DynamicFormatMiddleware:
             if content_length > 0:
                 try:
                     # Replace request.POST with flattened dictionary from JSON
-                    decoded_dict = simplejson.loads(request.raw_post_data)
+                    decoded_dict = json.loads(request.raw_post_data)
                     request.POST = request.POST.copy()
                     request.POST = self._flatten_dict(decoded_dict)
                 except:

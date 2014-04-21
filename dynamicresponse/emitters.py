@@ -4,9 +4,19 @@ http://bitbucket.org/jespern/django-piston
 """
 
 from __future__ import generators
+
+import decimal
+import re
+import inspect
+import copy
+
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
+
 from django.db.models.query import QuerySet
 from django.db.models import Model, permalink
-from django.utils import simplejson
 from django.utils.xmlutils import SimplerXMLGenerator
 from django.utils.encoding import smart_unicode
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -17,8 +27,6 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.core.paginator import Page
 
-import decimal, re, inspect
-import copy
 
 class Emitter(object):
     """
@@ -272,5 +280,5 @@ class JSONEmitter(Emitter):
         if settings.DEBUG:
             indent = 4
 
-        seria = simplejson.dumps(self.construct(), cls=DateTimeAwareJSONEncoder, ensure_ascii=False, indent=indent)
+        seria = json.dumps(self.construct(), cls=DateTimeAwareJSONEncoder, ensure_ascii=False, indent=indent)
         return seria
